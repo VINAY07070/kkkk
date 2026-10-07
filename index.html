@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">Chat AI</div>
+    
+    <div id="chat-container">
+        <!-- Messages will load here -->
+        <div class="message bot">Hello! I am your AI assistant. How can I help you?</div>
+    </div>
+
+    <!-- Form is important for feature phones so hitting the center D-Pad (Enter) triggers a submit -->
+    <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type here..." autocomplete="off" required>
+        <button type="submit" id="send-btn">Send</button>
+    </form>
+
+    <script src="app.js"></script>
+</body>
+</html>
