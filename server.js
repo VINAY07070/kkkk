@@ -106,19 +106,21 @@ app.post('/api/chat', async (req, res) => {
             return res.status(400).json({ error: "Message required." });
         }
 
-        const apiKey = process.env.OPENAI_API_KEY;
+        // Changed to use Groq API Key
+        const apiKey = process.env.GROQ_API_KEY;
         if (!apiKey) {
-            return res.status(500).json({ error: "API key is missing on the server." });
+            return res.status(500).json({ error: "GROQ API key is missing on the server." });
         }
 
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        // Groq uses an OpenAI-compatible endpoint format
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': \`Bearer \${apiKey}\`
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
+                model: "llama-3.3-70b-versatile", // Or change to exactly whichever model string you prefer on Groq
                 messages: [
                     { role: "system", content: "You are a helpful AI assistant. Keep responses short and simple for a small keypad phone screen." },
                     { role: "user", content: userMessage }
@@ -128,7 +130,9 @@ app.post('/api/chat', async (req, res) => {
         });
 
         if (!response.ok) {
-            return res.status(response.status).json({ error: "Failed to get AI response." });
+            const errData = await response.json().catch(() => ({}));
+            console.error("Groq API Error:", errData);
+            return res.status(response.status).json({ error: "Failed to get AI response from Groq." });
         }
 
         const data = await response.json();
